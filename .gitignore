@@ -1,2 +1,5 @@
 .venv
 __pycache__
+.python-version
+tinyllama_finetuned
+tinymistral_finetuned
