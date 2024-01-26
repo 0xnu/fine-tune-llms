@@ -30,11 +30,11 @@ The key components of the [split_dataset.py](./script/split_data.py) script, whi
 
 1. **Importing Libraries**: The script uses the `json` library to handle JSON data and `train_test_split` from `scikit-learn` to facilitate the splitting of the dataset.
 
-2. **Defining File Paths**: The script sets up file paths for the original training dataset (`train.jsonl`) as well as the paths where we will save the new training and validation datasets (`train_split.jsonl` and `validation_split.jsonl`, respectively).
+2. **Defining File Paths**: File paths are set for the original training dataset (train.jsonl), and for the new training, validation, and test datasets (`train_split.jsonl`, `validation_split.jsonl`, and `test_split.jsonl`, respectively).
 
 3. **Loading Data**: It reads the original `train.jsonl` file and deserialises each line (a JSON entry) from a JSON string to a Python dictionary—collecting all entries into a list.
 
-4. **Splitting Data**: The loaded data is split into new training and validation sets using the `train_test_split` function. The split ratio is 80% for training and 20% for validation, providing a random seed for reproducibility.
+4. **Splitting Data**: The script first separates 15% of the data as a test set. It splits the remaining 85% using a ratio, resulting in 70% of the original dataset going to training and 15% to validation. A random seed ensures reproducibility.
 
 5. **Writing New Data to Files**: Writes the new training and validation datasets to their respective `.jsonl` files. It serialised each entry back to a JSON string, with each line written to the corresponding file.
 
@@ -60,7 +60,7 @@ The key components of the training script are:
 
 3. **Dataset Paths**: The script defines file paths for the training and validation datasets; both are in JSONL format and located inside the `data` directory.
 
-4. **Tokenizer Loading and Configuration**: The tokeniser associated with the model, [mistralai/Mixtral-8x7B-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-v0.1), is loaded from the Hugging Face Model Hub. Additionally, the script sets the padding token for the tokeniser if it is not defined.
+4. **Tokenizer Loading and Configuration**: The tokeniser associated with the model is loaded from the Hugging Face Model Hub. Additionally, the script sets the padding token for the tokeniser if it is not defined.
 
 5. **Model Loading and Configuration**: The pre-trained language model is loaded, with its embeddings resized to accommodate any new tokens added by the tokeniser.
 
@@ -76,14 +76,21 @@ The key components of the training script are:
 
 11. **Saving the Fine-Tuned Model**: After training, the script saves the fine-tuned model to the output directory.
 
+12. **Model Evaluation**: After training, the model evaluates performance on the test set, which we did not utilise during the training or validation processes.
+
 The [train_data.py](./script/train_data.py) script is a starting point! Feel free to revise it for your use case.
+
 
 ### Usage
 
-To start the training process, run the training script with the following command:
+To start the training process, run the training script with the following commands for the relevant model:
 
 ```bash
-python3 ./script/train_data.py
+# Training Felladrin/TinyMistral-248M-SFT-v4
+python3 ./script/train_data.py --model=tinymistral
+
+# Training TinyLlama/TinyLlama-1.1B-Chat-v1.0
+python3 ./script/train_data.py --model=tinyllama
 ```
 
 ## Troubleshooting
